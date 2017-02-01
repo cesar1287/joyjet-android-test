@@ -5,4 +5,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="nav_drawer_home">Home</string>
+    <string name="nav_drawer_favorites">Favorites</string>
+    <string name="title_fav_activity">Favorites</string>
+    <string name="nav_drawer_title">JOYJET</string>
 </resources>
