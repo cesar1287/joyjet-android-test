@@ -9,15 +9,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.FavActivity"
+            android:label="@string/title_fav_activity"
+            android:parentActivityName=".view.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.ArticleActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
