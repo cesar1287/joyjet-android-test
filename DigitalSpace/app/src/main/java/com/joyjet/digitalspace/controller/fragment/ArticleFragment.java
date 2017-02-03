@@ -18,6 +18,7 @@ import com.joyjet.digitalspace.controller.adapter.ArticleAdapter;
 import com.joyjet.digitalspace.controller.domain.Article;
 import com.joyjet.digitalspace.controller.interfaces.RecyclerViewOnClickListenerHack;
 import com.joyjet.digitalspace.view.ArticleActivity;
+import com.joyjet.digitalspace.view.FavActivity;
 import com.joyjet.digitalspace.view.MainActivity;
 
 import java.util.List;
@@ -41,7 +42,11 @@ public class ArticleFragment extends Fragment implements RecyclerViewOnClickList
         linearLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mList = ((MainActivity) getActivity()).getPartnersList();
+        if(getActivity() instanceof MainActivity) {
+            mList = ((MainActivity) getActivity()).getArticlesList();
+        }else if(getActivity() instanceof FavActivity){
+            mList = ((FavActivity) getActivity()).getArticlesList();
+        }
         adapter = new ArticleAdapter(getActivity(), mList);
         adapter.setRecyclerViewOnClickListenerHack(this);
         mRecyclerView.setAdapter( adapter );
@@ -54,9 +59,9 @@ public class ArticleFragment extends Fragment implements RecyclerViewOnClickList
 
     @Override
     public void onClickListener(View view, int position) {
-        //Intent intent = new Intent(getActivity(), ArticleActivity.class);
-        //intent.putExtra("partner", mList.get(position));
-        //startActivity(intent);
+        Intent intent = new Intent(getActivity(), ArticleActivity.class);
+        intent.putExtra("article", mList.get(position));
+        startActivity(intent);
     }
 
     private static class RecyclerViewTouchListener implements RecyclerView.OnItemTouchListener {

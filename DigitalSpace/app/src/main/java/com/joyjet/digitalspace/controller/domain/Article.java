@@ -1,8 +1,18 @@
 package com.joyjet.digitalspace.controller.domain;
 
-public class Article {
+import java.io.Serializable;
 
-    private String title, description, url_banner;
+public class Article implements Serializable{
+
+    private String category, title, description, descriptionMainActivity, url_banner;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getTitle() {
         return title;
@@ -14,6 +24,14 @@ public class Article {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getDescriptionMainActivity() {
+        return descriptionMainActivity;
+    }
+
+    public void setDescriptionMainActivity(String descriptionMainActivity) {
+        this.descriptionMainActivity = descriptionMainActivity;
     }
 
     public void setDescription(String description) {
