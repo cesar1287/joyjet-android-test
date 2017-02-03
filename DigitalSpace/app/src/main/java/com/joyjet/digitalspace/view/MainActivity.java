@@ -2,6 +2,7 @@ package com.joyjet.digitalspace.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -42,8 +43,6 @@ public class MainActivity extends AppCompatActivity
 
     RequestQueue requestQueue;
 
-    public static final String TAG = "ResponseJSON";
-
     List<Article> articles = new ArrayList<>();
 
     private ProgressDialog dialog;
@@ -56,87 +55,11 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        dialog = ProgressDialog.show(this,"", "Loading data...", true, false);
+        setupUI();
 
-        doGet();
+        dialog = ProgressDialog.show(this,"", getString(R.string.dialog_loading_data), true, false);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.textColorPrimary));
-
-        setSupportActionBar(toolbar);
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    private void doGet() {
-
-        // prepare the Request
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, Util.URL, null,
-                new Response.Listener<JSONArray>(){
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        // display response
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject row;
-                            JSONArray item;
-
-                            try {
-                                row = response.getJSONObject(i);
-                                item = row.getJSONArray("items");
-                                for(int j=0;j<=item.length(); j++){
-                                    Article article = new Article();
-                                    article.setCategory(row.getString("category"));
-                                    Log.i(TAG, row.getString("category"));
-                                    JSONObject row_item = item.getJSONObject(j);
-                                    Log.i(TAG, row_item.getString("title"));
-                                    article.setTitle(row_item.getString("title"));
-                                    Log.i(TAG, row_item.getString("description"));
-                                    String description = row_item.getString("description");
-                                    article.setDescription(row_item.getString("description"));
-                                    String descriptionRv[] = description.split("\\.");
-                                    article.setDescriptionMainActivity(descriptionRv[0]);
-
-                                    JSONArray galery = row_item.getJSONArray("galery");
-                                    article.setUrlBanner(galery.get(0).toString());
-
-                                    Log.i(TAG, article.getTitle()+article.getUrlBanner());
-                                    articles.add(article);
-
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        dialog.dismiss();
-
-                        frag = (ArticleFragment) getSupportFragmentManager().findFragmentByTag("mainFrag");
-                        Log.i(TAG, "fragment");
-                        if(frag == null) {
-                            frag = new ArticleFragment();
-                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                            ft.replace(R.id.articles_fragment_container, frag, "mainFrag");
-                            ft.commit();
-                        }
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.getMessage());
-                    }
-                }
-        );
-
-        requestQueue.add(getRequest);
-
+        loadingData();
     }
 
     @Override
@@ -177,5 +100,104 @@ public class MainActivity extends AppCompatActivity
     public List<Article> getArticlesList() {
 
         return articles;
+    }
+
+    private void setupUI() {
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            toolbar.setTitleTextColor(getResources().getColor(R.color.textColorPrimary, getApplicationContext().getTheme()));
+        }else{
+            toolbar.setTitleTextColor(getResources().getColor(R.color.textColorPrimary));
+        }
+
+        setSupportActionBar(toolbar);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void loadingData() {
+
+        // Getting JSON Array node
+        // prepare the Request
+        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, Util.URL, null,
+                new Response.Listener<JSONArray>(){
+                    @Override
+                    public void onResponse(JSONArray response) {
+
+                        // looping through All Categories
+                        // display response
+                        for (int i = 0; i < response.length(); i++) {
+
+                            JSONObject row;
+
+                            JSONArray item;
+
+                            try {
+                                row = response.getJSONObject(i);
+
+                                // Getting JSON Array node items
+                                item = row.getJSONArray("items");
+
+                                // looping through All Items
+                                for(int j=0;j<=item.length(); j++){
+
+                                    // Getting JSON data and setting in a Article object
+                                    Article article = new Article();
+
+                                    article.setCategory(row.getString("category"));
+
+                                    // Item node is JSON Object
+                                    JSONObject row_item = item.getJSONObject(j);
+
+                                    article.setTitle(row_item.getString("title").toUpperCase());
+
+                                    String description = row_item.getString("description");
+                                    article.setDescription(row_item.getString("description"));
+                                    String descriptionRv[] = description.split("\\.");
+                                    article.setDescriptionMainActivity(descriptionRv[0]);
+
+                                    // Galery node is JSON Object
+                                    JSONArray galery = row_item.getJSONArray("galery");
+
+                                    article.setUrlBanner(galery.get(0).toString());
+
+                                    articles.add(article);
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        dialog.dismiss();
+
+                        frag = (ArticleFragment) getSupportFragmentManager().findFragmentByTag("mainFrag");
+                        if(frag == null) {
+                            frag = new ArticleFragment();
+                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                            ft.replace(R.id.articles_fragment_container, frag, "mainFrag");
+                            ft.commit();
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error.Response", error.getMessage());
+                    }
+                }
+        );
+
+        requestQueue.add(getRequest);
+
     }
 }
