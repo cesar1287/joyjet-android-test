@@ -11,4 +11,7 @@
     <string name="nav_drawer_title">JOYJET</string>
     <string name="title_activity_article">ArticleActivity</string>
     <string name="action_fav">Favorite</string>
+    <string name="dialog_loading_data">Loading data…</string>
+    <string name="message_article_removed_favorities">Article removed to favorites</string>
+    <string name="message_article_added_favorities">Article added to favorites</string>
 </resources>
