@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Digital Space</string>
+    <string name="app_name">JOYJET</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,4 +9,6 @@
     <string name="nav_drawer_favorites">Favorites</string>
     <string name="title_fav_activity">Favorites</string>
     <string name="nav_drawer_title">JOYJET</string>
+    <string name="title_activity_article">ArticleActivity</string>
+    <string name="action_fav">Favorite</string>
 </resources>
