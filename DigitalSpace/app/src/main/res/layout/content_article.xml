@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.joyjet.digitalspace.view.ArticleActivity"
+    tools:showIn="@layout/activity_article">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.joyjet.digitalspace.controller.custom_widgets.MyMainTextView
+            android:id="@+id/article_details_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16sp"
+            android:layout_marginLeft="16sp"
+            android:layout_marginTop="16sp"/>
+
+        <com.joyjet.digitalspace.controller.custom_widgets.MyMainTextView
+            android:id="@+id/article_details_category"
+            android:textColor="@color/textColorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/article_details_title"
+            android:layout_marginStart="16sp"
+            android:layout_marginLeft="16sp"/>
+
+        <TextView
+            android:id="@+id/article_details_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/article_details_category"
+            android:layout_margin="@dimen/text_margin" />
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>
